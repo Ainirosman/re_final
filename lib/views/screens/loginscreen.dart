@@ -1,14 +1,17 @@
-// ignore_for_file: prefer_typing_uninitialized_variables
+// ignore_for_file: camel_case_types, prefer_typing_uninitialized_variables, no_leading_underscores_for_local_identifiers, avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/views/screens/cataloguescreen.dart';
 import 'package:flutter_application_1/views/screens/registrationscreen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../../config.dart';
 import '../../models/user.dart';
 import 'homescreen.dart';
+
 
 class loginScreen extends StatefulWidget {
   const loginScreen({super.key});
@@ -125,7 +128,7 @@ class _loginScreenState extends State<loginScreen> {
                       ]),
                     ))),
             GestureDetector(
-              onTap: _goLogin,
+              onTap: _goRegister,
               child: const Text(
                 "Create a new account",
                 style: TextStyle(fontSize: 18),
@@ -155,28 +158,23 @@ class _loginScreenState extends State<loginScreen> {
       return;
     }
 
-    String email = _emailEditingController.text;
-    String password = _passwordEditingController.text;
-    http.post(Uri.parse("http://10.19.60.44/homestay/php/login_user.php"),
-        body: {
-          "email": email, 
-          "password": password})
-          .then((response) {
+    String _email = _emailEditingController.text;
+    String _password = _passwordEditingController.text;
+    http.post(Uri.parse("${Config.server}/php/login_user.php"),
+        body: {"email": _email, "password": _password}).then((response) {
       print(response.body);
       if(response.statusCode == 200){
         var jsonResponse = json.decode(response.body);
-        print(jsonResponse);
-        User user = User(
-        id: jsonResponse['id'], 
-        name: jsonResponse['name'], 
-        email: jsonResponse['email'], 
-        password: jsonResponse['password'], 
-        address: "", 
-        phone: "", 
-        regdate: "", otp: '');
+        User user = User.fromJson(jsonResponse['data']);
+        Fluttertoast.showToast(
+            msg: "Login Success",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            fontSize: 14.0);
         Navigator.push(
           context, MaterialPageRoute(
-            builder: (content) => homeScreen(user: user)));
+            builder: (content) => catalogueScreen(user: user)));
       }else{
         Fluttertoast.showToast(msg: "Login Fails",
         toastLength: Toast.LENGTH_SHORT,
@@ -189,12 +187,12 @@ class _loginScreenState extends State<loginScreen> {
   void _goHome() {
    User user = User(
         id: "0",
-        email: "ainirosmn@gmail.com",
-        name: "Aini",
+        email: "Unregistered",
+        name: "Unregistered",
         address: "na",
         phone: "0123456789",
         regdate: "0", 
-        password: '', otp: '');
+        otp: '0');
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -203,7 +201,7 @@ class _loginScreenState extends State<loginScreen> {
                 )));
   }
 
-  void _goLogin() {
+  void _goRegister() {
     Navigator.push(context,
         MaterialPageRoute(builder: (content) => const registrationScreen()));
   }
@@ -211,7 +209,7 @@ class _loginScreenState extends State<loginScreen> {
   void saveremovepref(bool value) async {
     String email = _emailEditingController.text;
     String password = _passwordEditingController.text;
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final prefs = await SharedPreferences.getInstance();
     if (value) {
       if (!_formKey.currentState!.validate()) {
         Fluttertoast.showToast(
@@ -250,10 +248,10 @@ class _loginScreenState extends State<loginScreen> {
   }
 
   Future<void> loadPref() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final prefs = await SharedPreferences.getInstance();
     String email = (prefs.getString('email')) ?? '';
     String password = (prefs.getString('password')) ?? '';
-    if (email.isNotEmpty) {
+    if (email.length>1) {
       setState(() {
         _emailEditingController.text = email;
         _passwordEditingController.text = password;

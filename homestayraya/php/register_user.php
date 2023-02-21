@@ -1,9 +1,13 @@
 <?php 
-  if (!isset($_POST['register'])){
+  if (!isset($_POST)){
 	  $response = array('status' => 'failed', 'data' => null);
 	  sendJsonResponse($response);
 	  die();
-  }
+  } else{
+	
+	$response = array('status' => 'success', 'data' => null);
+	sendJsonResponse($response);
+}
  
  include_once ("dbconnect.php");
  

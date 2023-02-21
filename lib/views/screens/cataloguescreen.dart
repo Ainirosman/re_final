@@ -1,18 +1,19 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_application_1/views/screens/loginscreen.dart';
-import 'package:flutter_application_1/views/screens/registrationscreen.dart';
+// ignore_for_file: camel_case_types, avoid_print
+
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:ndialog/ndialog.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-
 import '../../config.dart';
-import '../../models/homestay.dart';
 import '../../models/user.dart';
-import '../shared/mainmenuwidget.dart';
+import '/views/screens/registrationscreen.dart';
+import '/views/shared/mainmenuwidget.dart';
+import 'loginscreen.dart';
 import 'newhomestayscreen.dart';
+import '../../models/homestay.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class catalogueScreen extends StatefulWidget {
   final User user;
@@ -20,44 +21,44 @@ class catalogueScreen extends StatefulWidget {
 
   @override
   State<catalogueScreen> createState() => _catalogueScreenState();
-  // TODO: implement createState
-
 }
 
 class _catalogueScreenState extends State<catalogueScreen> {
-  late Position position;
+  late Position _position;
   List<homestay> homestayList = <homestay>[];
-  String titlecenter = "loading";
+  String titlecenter = "Loading...";
   late double screenHeight, screenWidth, resWidth;
   int rowCount = 2;
 
   @override
   void dispose() {
+    super.dispose();
     super.initState();
-    _loadhomestay();
+    _loadHomestay();
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     screenHeight = MediaQuery.of(context).size.height;
     screenWidth = MediaQuery.of(context).size.width;
-
     if (screenWidth <= 600) {
       resWidth = screenWidth;
+      rowCount = 2;
+    } else {
+      resWidth = screenWidth * 0.75;
       rowCount = 3;
     }
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Catalogue"),
+          title: const Text('Catalogue'),
           actions: [
             IconButton(
-                onPressed: registrationForm,
+                onPressed: _registrationForm,
                 icon: const Icon(Icons.app_registration)),
             IconButton(
-              onPressed: loginForm,
+              onPressed: _loginForm,
               icon: const Icon(Icons.login),
             ),
             PopupMenuButton(
@@ -75,9 +76,9 @@ class _catalogueScreenState extends State<catalogueScreen> {
               },
               onSelected: (value) {
                 if (value == 0) {
-                  _gotoNewHomestay();
+                  _goToNewHomestay();
                 } else if (value == 1) {
-                  print("My Order already selected");
+                  print("My Order is selected");
                 }
               },
             ),
@@ -91,44 +92,50 @@ class _catalogueScreenState extends State<catalogueScreen> {
             : Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "Your current homestay(${homestayList.length} found)",
+                      "Your current homestay (${homestayList.length} found)",
                       style: const TextStyle(
                           fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                   ),
                   const SizedBox(
-                    height: 5,
+                    height: 4,
                   ),
                   Expanded(
                     child: GridView.count(
                       crossAxisCount: rowCount,
                       children: List.generate(homestayList.length, (index) {
                         return Card(
-                          elevation: 0,
+                          elevation: 8,
                           child: InkWell(
-                            onTap: () {},
-                            onLongPress: () {},
+                            onTap: () {
+                              // show details
+                            },
+                            onLongPress: () {
+                              // delete
+                            },
                             child: Column(children: [
                               const SizedBox(
-                                height: 10,
+                                height: 8,
                               ),
                               Flexible(
-                                flex: 5,
+                                flex: 6,
                                 child: CachedNetworkImage(
                                   width: resWidth / 2,
                                   fit: BoxFit.cover,
                                   imageUrl:
-                                      "${Config.server}/assets/homestayImage/${homestayList[index].hsId}-1.png",
+                                      "${Config.server}/server/productimages/${homestayList[index].prid}-1.jpg",
                                   placeholder: (context, url) =>
+                                      const LinearProgressIndicator(),
+                                  errorWidget: (context, url, error) =>
                                       const Icon(Icons.error),
                                 ),
                               ),
                               Flexible(
                                   flex: 4,
                                   child: Padding(
-                                    padding: EdgeInsets.all(10),
+                                    padding: const EdgeInsets.all(8.0),
                                     child: Column(
                                       children: [
                                         Text(
@@ -138,6 +145,7 @@ class _catalogueScreenState extends State<catalogueScreen> {
                                                   .toString(),
                                               15),
                                           style: const TextStyle(
+                                              //fontSize: 12,
                                               fontWeight: FontWeight.bold),
                                         ),
                                         Text(
@@ -158,17 +166,17 @@ class _catalogueScreenState extends State<catalogueScreen> {
     );
   }
 
-  void registrationForm() {
+  void _registrationForm() {
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => const registrationScreen()));
   }
 
-  void loginForm() {
+  void _loginForm() {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => loginScreen()));
+        context, MaterialPageRoute(builder: (context) => const loginScreen()));
   }
 
-  Future<void> _gotoNewHomestay() async {
+  Future<void> _goToNewHomestay() async {
     ProgressDialog progressDialog = ProgressDialog(
       context,
       blur: 10,
@@ -188,12 +196,9 @@ class _catalogueScreenState extends State<catalogueScreen> {
     }
     if (await _checkPermissionGetLoc()) {
       progressDialog.dismiss();
-      await Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (content) =>
-                  NewHomestayScreen(user: widget.user, position: position, placemarks: [],)));
-      _loadhomestay();
+      // ignore: use_build_context_synchronously
+      await Navigator.push( context,MaterialPageRoute(builder: (content) =>NewHomestayScreen(user: widget.user, position: _position)));
+      _loadHomestay();
     } else {
       Fluttertoast.showToast(
           msg: "Please allow the app to access the location",
@@ -236,25 +241,25 @@ class _catalogueScreenState extends State<catalogueScreen> {
       Geolocator.openLocationSettings();
       return false;
     }
-    position = await Geolocator.getCurrentPosition(
+    _position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.best);
     return true;
   }
 
-  void _loadhomestay() {
+  void _loadHomestay() {
     http
         .get(
       Uri.parse(
-          "${Config.server}/php/load_homestay.php?userid=${widget.user.id}"),
+          "${Config.server}/php/load_homestay.php?user_id=${widget.user.id}"),
     )
         .then((response) {
       if (response.statusCode == 200) {
         var jsondata = json.decode(response.body);
         if (jsondata['status'] == "success") {
           var extractdata = jsondata['data'];
-          if (extractdata['homestay'] != null) {
+          if (extractdata['homestays'] != null) {
             homestayList = <homestay>[];
-            extractdata['homestay'].forEach((v) {
+            extractdata['homestays'].forEach((v) {
               homestayList.add(homestay.fromJson(v));
             });
             titlecenter = "Found";
@@ -279,4 +284,4 @@ class _catalogueScreenState extends State<catalogueScreen> {
       return str;
     }
   }
-}
+} //end of class

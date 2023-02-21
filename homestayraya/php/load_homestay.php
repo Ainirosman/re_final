@@ -4,32 +4,32 @@ if(!isset($_GET)){
 	$response = array('status' => 'failed', 'data' => null);
 	sendJsonResponse($response);
 	die();
-	
+}
 	include_once("dbconnect.php");
-	$userid = $_POST['userid'];
+	$user_id = $_GET['user_id'];
 	
-	$sqlloadproduct = "SELECT * FROM tbl_products WHERE pridowner = '$userid' 
+	$sqlloadproduct = "SELECT * FROM tbl_products WHERE user_id = '$user_Id' 
 	ORDER BY prdate DESC";
 	$result = $conn->query($sqlloadproduct);
 	
 	if ($result->num_rows > 0) {
-    $response["products"] = array();
+    $homestaysarray["products"] = array();
 	while ($row = $result->fetch_assoc()) {
         $prlist = array();
         $prlist['prid'] = $row['prid'];
+        $prlist['user_id'] = $row['user_id'];
         $prlist['prname'] = $row['prname'];
         $prlist['prdesc'] = $row['prdesc'];
         $prlist['prprice'] = $row['prprice'];
-        $prlist['prqty'] = $row['prqty'];
-        $prlist['prdel'] = $row['prdel'];
+        $prlist['praddress'] = $row['praddress'];
         $prlist['prstate'] = $row['prstate'];
         $prlist['prloc'] = $row['prloc'];
         $prlist['prlat'] = $row['prlat'];
         $prlist['prlong'] = $row['prlong'];
         $prlist['prdate'] = $row['prdate'];
-        array_push($response["products"],$prlist);
+        array_push($homestaysarray["products"],$prlist);
     }
-    $response = array('status' => 'success', 'data' => $products);
+    $response = array('status' => 'success', 'data' => $homestaysarray);
     sendJsonResponse($response);
 }else{
      $response = array('status' => 'failed', 'data' => null);

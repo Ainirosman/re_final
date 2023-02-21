@@ -11,6 +11,7 @@ class MainMenuWidget extends StatefulWidget {
 
   @override
   State<MainMenuWidget> createState() => _MainMenuWidgetState();
+  // ignore: todo
   // TODO: implement createState
 
 }
@@ -18,6 +19,7 @@ class MainMenuWidget extends StatefulWidget {
 class _MainMenuWidgetState extends State<MainMenuWidget> {
   @override
   Widget build(BuildContext context) {
+    // ignore: todo
     // TODO: implement build
     return Drawer(
       width: 250,

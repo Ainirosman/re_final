@@ -1,3 +1,5 @@
+// ignore_for_file: camel_case_types, unused_field, prefer_final_fields, no_leading_underscores_for_local_identifiers, avoid_print
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -158,7 +160,7 @@ String? validatePassword(String value){
   void _registerUser(String name, String email, String password, String phone) {
      try {
       http.post(Uri.parse(
-        "http://10.19.60.44/homestay/php/register_user.php"),
+        "http://10.19.83.19/homestay/php/register_user.php"),
         body: {
           "name":name, 
           "email":email,

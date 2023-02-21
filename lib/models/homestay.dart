@@ -1,56 +1,60 @@
+
+// ignore_for_file: non_constant_identifier_names, camel_case_types
+
 class homestay {
-  String? hsId;
-  String? userId;
+  String? prid;
+  String? user_id;
   String? prname;
-  String? hsDesc;
+  String? prdesc;
   String? prprice;
-  String? hsAddress;
-  String? hsState;
-  String? hsLocal;
-  String? hsLat;
-  String? hsLng;
-  String? hsDate;
+  String? praddress;
+  String? prstate;
+  String? prloc;
+  String? prlat;
+  String? prlong;
+  String? prdate;
 
   homestay(
-      {this.hsId,
-      this.userId,
+      {this.prid,
+      this.user_id,
       this.prname,
-      this.hsDesc,
+      this.prdesc,
       this.prprice,
-      this.hsAddress,
-      this.hsState,
-      this.hsLocal,
-      this.hsLat,
-      this.hsLng,
-      this.hsDate});
+      this.praddress,
+      this.prstate,
+      this.prloc,
+      this.prlat,
+      this.prlong,
+      this.prdate});
 
   homestay.fromJson(Map<String, dynamic> json) {
-    hsId = json['hs_id'];
-    userId = json['user_id'];
-    prname = json['hs_name'];
-    hsDesc = json['hs_desc'];
-    prprice = json['hs_price'];
-    hsAddress = json['hs_address'];
-    hsState = json['hs_state'];
-    hsLocal = json['hs_local'];
-    hsLat = json['hs_lat'];
-    hsLng = json['hs_lng'];
-    hsDate = json['hs_date'];
+    prid = json['prid'];
+    user_id = json['user_id'];
+    prname = json['prname'];
+    prdesc = json['prdesc'];
+    prprice = json['prprice'];
+    praddress = json['praddress'];
+    prstate = json['prstate'];
+    prloc = json['prloc'];
+    prlat = json['prlat'];
+    prlong = json['prlong'];
+    prdate = json['prdate'];
   }
+
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['hs_id'] = hsId;
-    data['user_id'] = userId;
-    data['hs_name'] = prname;
-    data['hs_desc'] = hsDesc;
-    data['hs_price'] = prprice;
-    data['hs_address'] = hsAddress;
-    data['hs_state'] = hsState;
-    data['hs_local'] = hsLocal;
-    data['hs_lat'] = hsLat;
-    data['hs_lng'] = hsLng;
-    data['hs_date'] = hsDate;
+    data['prid'] = prid;
+    data['user_id'] = user_id;
+    data['prname'] = prname;
+    data['prdesc'] = prdesc;
+    data['prprice'] = prprice;
+    data['praddress'] = praddress;
+    data['prstate'] = prstate;
+    data['prloc'] = prloc;
+    data['prlat'] = prlat;
+    data['prlong'] = prlong;
+    data['prdate'] = prdate;
     return data;
   }
 }

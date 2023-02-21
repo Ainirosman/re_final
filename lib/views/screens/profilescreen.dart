@@ -1,3 +1,5 @@
+// ignore_for_file: camel_case_types
+
 import 'package:flutter/material.dart';
 
 import '../../models/user.dart';
@@ -9,6 +11,7 @@ class profileScreen extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() => _profileScreenState();
+  // ignore: todo
   // TODO: implement createState
 
 }
@@ -16,6 +19,7 @@ class profileScreen extends StatefulWidget {
 class _profileScreenState extends State<profileScreen> {
   @override
   Widget build(BuildContext context) {
+    // ignore: todo
     // TODO: implement build
     return WillPopScope(
       onWillPop: () async => false,

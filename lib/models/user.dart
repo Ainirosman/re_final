@@ -14,7 +14,8 @@ class User {
       required this.phone,
       required this.address,
       required this.regdate,
-      required this.otp, required password});
+      required this.otp}
+      );
 
   User.fromJson(Map<String, dynamic> json) {
     id = json["id"];

@@ -1,5 +1,5 @@
 <?php
-if (!isset($_POST['Login'])){
+if (!isset($_POST)){
 	$response = array('status' => 'failed', 'data' => null);
 	sendJsonResponse($response);
 	die();
@@ -23,14 +23,16 @@ if($result->num_rows >0){
 		$userlist['address'] = $row['user_address'];
 		$userlist['phone'] = $row['user_phone'];
 		$userlist['regdate'] = $row['user_datereg'];
-	$response = array('status' => 'success', 'data' => null);
+		$userlist['otp'] = $row['otp'];
+	$response = array('status' => 'success', 'data' => $userlist);
 	sendJsonResponse($response);
 	}
 }else{
-	$response = array('status' => 'failed', 'data' => null);
+	$response = array('status' => 'failed', 'data' => $null);
 	sendJsonResponse($response);
 }
-function sendJsonResponse($sentArray){
+function sendJsonResponse($sentArray)
+{
 	header ('Content-Type: application/json');
 	echo json_encode($sentArray);
 }

@@ -1,3 +1,5 @@
+// ignore_for_file: camel_case_types
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/views/screens/homescreen.dart';
 import 'dart:async';
@@ -9,6 +11,7 @@ class splashscreen extends StatefulWidget {
 
   @override
   State<splashscreen> createState() => _splashscreenState();
+  // ignore: todo
   // TODO: implement createState
 
 }
@@ -24,7 +27,7 @@ class _splashscreenState extends State<splashscreen> {
         phone: "01234567890",
         address: "NA",
         regdate: "0",
-        otp: "0", password: null);
+        otp: "0",);
     Timer(
         const Duration(seconds: 5),
         () => Navigator.pushReplacement(
@@ -37,6 +40,7 @@ class _splashscreenState extends State<splashscreen> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: todo
     // TODO: implement build
     return Scaffold(
         body: Stack(

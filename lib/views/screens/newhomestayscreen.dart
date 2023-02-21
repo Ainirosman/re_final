@@ -1,65 +1,51 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:http/http.dart' as http;
-import 'package:sn_progress_dialog/progress_dialog.dart';
-
 import '../../config.dart';
 import '../../models/user.dart';
-
-
+import 'package:http/http.dart' as http;
+import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 
 class NewHomestayScreen extends StatefulWidget {
   final User user;
   final Position position;
-  final List<Placemark> placemarks;
   const NewHomestayScreen(
-      {super.key,
-      required this.user,
-      required this.position,
-      required this.placemarks});
+      {super.key, required this.user, required this.position});
 
   @override
   State<NewHomestayScreen> createState() => _NewHomestayScreenState();
 }
 
 class _NewHomestayScreenState extends State<NewHomestayScreen> {
-  final TextEditingController _prnameEditingController =
-      TextEditingController();
-  final TextEditingController _prdescEditingController =
-      TextEditingController();
-  final TextEditingController _prpriceEditingController =
-      TextEditingController();
-  final TextEditingController _praddressEditingController =
-      TextEditingController();
-  final TextEditingController _prdelEditingController = TextEditingController();
-  final TextEditingController _prqtyEditingController = TextEditingController();
-  final TextEditingController _prstateEditingController =
-      TextEditingController();
-  final TextEditingController _prlocalEditingController =
-      TextEditingController();
-  final _formKey = GlobalKey<FormState>();
-  var _lat, _lng;
-
   @override
   void initState() {
     super.initState();
-    _lat = widget.position.latitude.toString();
-    _lng = widget.position.longitude.toString();
+    _getAddress();
+    prlat = widget.position.latitude.toString();
+    prlong = widget.position.longitude.toString();
   }
 
   File? _image;
   List<File> imageList = [];
   var pathAsset = "assets/images/camera.png";
-  bool _isChecked = false;
+  final TextEditingController _prnameEditingController =
+          TextEditingController(),
+      _prdescEditingController = TextEditingController(),
+      _prpriceEditingController = TextEditingController(),
+      _prstateEditingController = TextEditingController(),
+      _prlocEditingController = TextEditingController(),
+      _praddressEditingController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  var prlat, prlong;
   int _index = 0;
+
   @override
- Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Add New Homestay")),
       body: SingleChildScrollView(
@@ -186,7 +172,7 @@ class _NewHomestayScreenState extends State<NewHomestayScreen> {
                                   val!.isEmpty || (val.length < 3)
                                       ? "Current Locality"
                                       : null,
-                              controller: _prlocalEditingController,
+                              controller: _prlocEditingController,
                               keyboardType: TextInputType.text,
                               decoration: const InputDecoration(
                                   labelText: 'Current Locality',
@@ -364,7 +350,7 @@ class _NewHomestayScreenState extends State<NewHomestayScreen> {
     setState(() {
       _prstateEditingController.text =
           placemarks[0].administrativeArea.toString();
-      _prlocalEditingController.text = placemarks[0].locality.toString();
+      _prlocEditingController.text = placemarks[0].locality.toString();
     });
   }
 
@@ -377,21 +363,21 @@ class _NewHomestayScreenState extends State<NewHomestayScreen> {
     String prprice = _prpriceEditingController.text.toString();
     String praddress = _praddressEditingController.text.toString();
     String prstate = _prstateEditingController.text.toString();
-    String prlocal = _prlocalEditingController.text.toString();
+    String prloc = _prlocEditingController.text.toString();
     String base64Image1 = base64Encode(imageList[0].readAsBytesSync());
     String base64Image2 = base64Encode(imageList[1].readAsBytesSync());
     String base64Image3 = base64Encode(imageList[2].readAsBytesSync());
 
     http.post(Uri.parse("${Config.server}/php/insert_homestay.php"), body: {
-      "userid": widget.user.id,
+      "user_id": widget.user.id,
       "prname": prname,
       "prdesc": prdesc,
       "prprice": prprice,
       "praddress": praddress,
       "prstate": prstate,
-      "loc": prlocal,
-      "lat": _lat,
-      "lng": _lng,
+      "prloc": prloc,
+      "prlat": prlat,
+      "prlong": prlong,
       "image1": base64Image1,
       "image2": base64Image2,
       "image3": base64Image3,
