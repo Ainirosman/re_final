@@ -158,10 +158,11 @@ class _loginScreenState extends State<loginScreen> {
       return;
     }
 
-    String _email = _emailEditingController.text;
-    String _password = _passwordEditingController.text;
+    String email = _emailEditingController.text;
+    String password = _passwordEditingController.text;
+   try {
     http.post(Uri.parse("${Config.server}/php/login_user.php"),
-        body: {"email": _email, "password": _password}).then((response) {
+        body: {"email": email, "password": password}).then((response) {
       print(response.body);
       if(response.statusCode == 200){
         var jsonResponse = json.decode(response.body);
@@ -176,12 +177,19 @@ class _loginScreenState extends State<loginScreen> {
           context, MaterialPageRoute(
             builder: (content) => catalogueScreen(user: user)));
       }else{
-        Fluttertoast.showToast(msg: "Login Fails",
+        Fluttertoast.showToast(
+        msg: "Login Fails",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
         fontSize: 14);
-      }});}
+        return;
+      }});
+        }catch(e){
+      print(e.toString());
+     }
+      }
+  
       
 
   void _goHome() {

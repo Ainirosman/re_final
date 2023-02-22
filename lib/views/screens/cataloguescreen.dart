@@ -11,9 +11,10 @@ import '../../models/user.dart';
 import '/views/screens/registrationscreen.dart';
 import '/views/shared/mainmenuwidget.dart';
 import 'loginscreen.dart';
-import 'newhomestayscreen.dart';
 import '../../models/homestay.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+
+import 'newhomestayscreen.dart';
 
 class catalogueScreen extends StatefulWidget {
   final User user;
@@ -125,7 +126,7 @@ class _catalogueScreenState extends State<catalogueScreen> {
                                   width: resWidth / 2,
                                   fit: BoxFit.cover,
                                   imageUrl:
-                                      "${Config.server}/server/productimages/${homestayList[index].prid}-1.jpg",
+                                      "${Config.server}/server/productimages/${homestayList[index].prid}-1.png",
                                   placeholder: (context, url) =>
                                       const LinearProgressIndicator(),
                                   errorWidget: (context, url, error) =>
@@ -250,16 +251,16 @@ class _catalogueScreenState extends State<catalogueScreen> {
     http
         .get(
       Uri.parse(
-          "${Config.server}/php/load_homestay.php?user_id=${widget.user.id}"),
+          "${Config.server}/php/load_homestay.php?userid=${widget.user.id}"),
     )
         .then((response) {
       if (response.statusCode == 200) {
         var jsondata = json.decode(response.body);
         if (jsondata['status'] == "success") {
           var extractdata = jsondata['data'];
-          if (extractdata['homestays'] != null) {
+          if (extractdata['homestay'] != null) {
             homestayList = <homestay>[];
-            extractdata['homestays'].forEach((v) {
+            extractdata['homestay'].forEach((v) {
               homestayList.add(homestay.fromJson(v));
             });
             titlecenter = "Found";

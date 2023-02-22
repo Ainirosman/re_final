@@ -26,8 +26,8 @@ class _NewHomestayScreenState extends State<NewHomestayScreen> {
   void initState() {
     super.initState();
     _getAddress();
-    prlat = widget.position.latitude.toString();
-    prlong = widget.position.longitude.toString();
+    _lat = widget.position.latitude.toString();
+    _lng = widget.position.longitude.toString();
   }
 
   File? _image;
@@ -38,10 +38,10 @@ class _NewHomestayScreenState extends State<NewHomestayScreen> {
       _prdescEditingController = TextEditingController(),
       _prpriceEditingController = TextEditingController(),
       _prstateEditingController = TextEditingController(),
-      _prlocEditingController = TextEditingController(),
+      _prlocalEditingController = TextEditingController(),
       _praddressEditingController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  var prlat, prlong;
+  var _lat, _lng;
   int _index = 0;
 
   @override
@@ -172,7 +172,7 @@ class _NewHomestayScreenState extends State<NewHomestayScreen> {
                                   val!.isEmpty || (val.length < 3)
                                       ? "Current Locality"
                                       : null,
-                              controller: _prlocEditingController,
+                              controller: _prlocalEditingController,
                               keyboardType: TextInputType.text,
                               decoration: const InputDecoration(
                                   labelText: 'Current Locality',
@@ -350,7 +350,7 @@ class _NewHomestayScreenState extends State<NewHomestayScreen> {
     setState(() {
       _prstateEditingController.text =
           placemarks[0].administrativeArea.toString();
-      _prlocEditingController.text = placemarks[0].locality.toString();
+      _prlocalEditingController.text = placemarks[0].locality.toString();
     });
   }
 
@@ -363,21 +363,21 @@ class _NewHomestayScreenState extends State<NewHomestayScreen> {
     String prprice = _prpriceEditingController.text.toString();
     String praddress = _praddressEditingController.text.toString();
     String prstate = _prstateEditingController.text.toString();
-    String prloc = _prlocEditingController.text.toString();
+    String prlocal = _prlocalEditingController.text.toString();
     String base64Image1 = base64Encode(imageList[0].readAsBytesSync());
     String base64Image2 = base64Encode(imageList[1].readAsBytesSync());
     String base64Image3 = base64Encode(imageList[2].readAsBytesSync());
 
     http.post(Uri.parse("${Config.server}/php/insert_homestay.php"), body: {
-      "user_id": widget.user.id,
+      "userid": widget.user.id,
       "prname": prname,
       "prdesc": prdesc,
       "prprice": prprice,
       "praddress": praddress,
-      "prstate": prstate,
-      "prloc": prloc,
-      "prlat": prlat,
-      "prlong": prlong,
+      "state": prstate,
+      "loc": prlocal,
+      "lat": _lat,
+      "lng": _lng,
       "image1": base64Image1,
       "image2": base64Image2,
       "image3": base64Image3,

@@ -6,18 +6,18 @@ if(!isset($_GET)){
 	die();
 }
 	include_once("dbconnect.php");
-	$user_id = $_GET['user_id'];
+	$userid = $_GET['userid'];
 	
-	$sqlloadproduct = "SELECT * FROM tbl_products WHERE user_id = '$user_Id' 
+	$sqlloadproduct = "SELECT * FROM tbl_products WHERE user_id = '$userid' 
 	ORDER BY prdate DESC";
 	$result = $conn->query($sqlloadproduct);
 	
 	if ($result->num_rows > 0) {
-    $homestaysarray["products"] = array();
+    $homestaysarray["homestay"] = array();
 	while ($row = $result->fetch_assoc()) {
         $prlist = array();
         $prlist['prid'] = $row['prid'];
-        $prlist['user_id'] = $row['user_id'];
+        $prlist['userid'] = $row['user_id'];
         $prlist['prname'] = $row['prname'];
         $prlist['prdesc'] = $row['prdesc'];
         $prlist['prprice'] = $row['prprice'];
@@ -27,7 +27,7 @@ if(!isset($_GET)){
         $prlist['prlat'] = $row['prlat'];
         $prlist['prlong'] = $row['prlong'];
         $prlist['prdate'] = $row['prdate'];
-        array_push($homestaysarray["products"],$prlist);
+        array_push($homestaysarray["homestay"],$prlist);
     }
     $response = array('status' => 'success', 'data' => $homestaysarray);
     sendJsonResponse($response);

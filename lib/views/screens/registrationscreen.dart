@@ -1,9 +1,12 @@
 // ignore_for_file: camel_case_types, unused_field, prefer_final_fields, no_leading_underscores_for_local_identifiers, avoid_print
 
-import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/views/screens/cataloguescreen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+
+import '../../config.dart';
+import '../../models/user.dart';
 
 class registrationScreen extends StatefulWidget {
   const registrationScreen({super.key});
@@ -22,7 +25,7 @@ class _registrationScreenState extends State<registrationScreen> {
   final TextEditingController _passwordEditingController = TextEditingController();
   final TextEditingController _phoneEditingController    = TextEditingController();
 
-  final bool _isChecked = false;
+  bool _isChecked = false;
   bool _passwordVisible = false;
   final _formKey        = GlobalKey <FormState>();
 
@@ -159,8 +162,7 @@ String? validatePassword(String value){
 
   void _registerUser(String name, String email, String password, String phone) {
      try {
-      http.post(Uri.parse(
-        "http://10.19.83.19/homestay/php/register_user.php"),
+      http.post(Uri.parse("${Config.server}/php/register_user.php"),
         body: {
           "name":name, 
           "email":email,
@@ -168,14 +170,28 @@ String? validatePassword(String value){
           "phone":phone, 
           'register': "register"})
         .then((response){
-          var data = jsonDecode(response.body);
-          if (response.statusCode==200 && data['status'] == "success"){
-            Fluttertoast.showToast(msg: "Registration Successfull",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            fontSize: 14);
-            return;
+        if (response.statusCode == 200) {
+          Fluttertoast.showToast(
+              msg: "Registration Success",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              fontSize: 14.0);
+          User user = User(
+              id: "0",
+              name: "Unregistered",
+              email: "Unregistered",
+              phone: "0123456789",
+              address: "NA",
+              regdate: "0",
+              otp: "0");
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (content) => catalogueScreen(
+                        user: user,
+                      )));
+            
           }else{
             Fluttertoast.showToast(msg: "Failed register",
             toastLength: Toast.LENGTH_SHORT,

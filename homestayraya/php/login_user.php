@@ -13,6 +13,7 @@ $password = sha1($_POST['password']);
 $sqllogin = "SELECT * FROM tbl_users WHERE user_email = '$email' AND user_password = '$password'";
 $result = $conn->query($sqllogin);
 
+try{
 if($result->num_rows >0){
 	while($row = $result->fetch_assoc()){
 		$userlist = array();
@@ -28,9 +29,15 @@ if($result->num_rows >0){
 	sendJsonResponse($response);
 	}
 }else{
-	$response = array('status' => 'failed', 'data' => $null);
+	$response = array('status' => 'failed', 'data' => null);
 	sendJsonResponse($response);
 }
+}
+catch(Exception $e){
+	$response = array('status' => 'failed', 'data' => null);
+	sendJsonResponse ($response);
+}
+$conn->close();
 function sendJsonResponse($sentArray)
 {
 	header ('Content-Type: application/json');
