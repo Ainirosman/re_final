@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print, non_constant_identifier_names
+
 import 'dart:convert';
 import 'dart:io';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -420,7 +422,7 @@ class _NewHomestayScreenState extends State<NewHomestayScreen> {
               width: 200,
               decoration: BoxDecoration(
                   image: DecorationImage(
-                image: imageList.length > 0
+                image: imageList.isNotEmpty
                     ? FileImage(imageList[0]) as ImageProvider
                     : AssetImage(pathAsset),
                 fit: BoxFit.cover,
