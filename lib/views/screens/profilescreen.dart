@@ -191,23 +191,6 @@ class _profileScreenState extends State<profileScreen> {
                               height: 2,
                             ),
                             MaterialButton(
-                              onPressed: _registerAccountDialog,
-                              child: const Text("NEW ACCOUNT REGISTRATION"),
-                            ),
-                            const Divider(
-                              height: 2,
-                            ),
-                            MaterialButton(
-                              onPressed: _loginDialog,
-                              child: const Text("LOGIN"),
-                            ),
-                            const Divider(
-                              height: 2,
-                            ),
-                            const Divider(
-                              height: 2,
-                            ),
-                            MaterialButton(
                               onPressed: isDisable ? null : _logoutDialog,
                               child: const Text("LOGOUT"),
                             ),
