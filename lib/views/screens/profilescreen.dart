@@ -204,10 +204,6 @@ class _profileScreenState extends State<profileScreen> {
                             const Divider(
                               height: 2,
                             ),
-                            MaterialButton(
-                              onPressed: isDisable ? null : buyCreditPage,
-                              child: const Text("BUY CREDIT"),
-                            ),
                             const Divider(
                               height: 2,
                             ),
