@@ -184,7 +184,8 @@ String? validatePassword(String value){
               phone: "0123456789",
               address: "NA",
               regdate: "0",
-              otp: "0");
+              otp: "0",
+              credit: "0");
           Navigator.push(
               context,
               MaterialPageRoute(

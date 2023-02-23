@@ -27,7 +27,8 @@ class _splashscreenState extends State<splashscreen> {
         phone: "01234567890",
         address: "NA",
         regdate: "0",
-        otp: "0",);
+        otp: "0", 
+        credit: '0',);
     Timer(
         const Duration(seconds: 5),
         () => Navigator.pushReplacement(

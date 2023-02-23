@@ -17,10 +17,11 @@
  $phone= $_POST['phone'];
  $address= "na";
  $otp= rand(10000,99999);
+ $credit = 20;
 
  
- $sqlregister = "INSERT INTO `tbl_users`(`user_email`, `user_name`, `user_password`, `user_phone`, `user_address`, `otp`)
- VALUES ('$email','$name','$password','$phone','$address','$otp')";
+ $sqlregister = "INSERT INTO `tbl_users`(`user_email`, `user_name`, `user_password`, `user_phone`, `user_address`, `otp`,'user_credit')
+ VALUES ('$email','$name','$password','$phone','$address','$otp','$credit')";
  
  try{
  if($conn->query($sqlregister) === TRUE){

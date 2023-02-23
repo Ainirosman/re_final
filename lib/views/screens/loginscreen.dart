@@ -200,7 +200,8 @@ class _loginScreenState extends State<loginScreen> {
         address: "na",
         phone: "0123456789",
         regdate: "0", 
-        otp: '0');
+        otp: '0',
+        credit: "0");
     Navigator.push(
         context,
         MaterialPageRoute(
